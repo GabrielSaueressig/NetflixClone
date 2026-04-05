@@ -8,7 +8,5 @@ namespace DTOs
 
         public string? Name { get; set; }
 
-        public List<int>? MoviesId { get; set; }
-
     }
 }
