@@ -2,7 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using NetflixClone.Data;
 using NetflixClone.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    EnvironmentName = Environments.Development
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
