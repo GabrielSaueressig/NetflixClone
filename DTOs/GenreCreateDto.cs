@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace NetflixClone.DTOs
+namespace DTOs
 {
     public class GenreCreateDto
     {

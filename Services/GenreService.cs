@@ -1,8 +1,6 @@
 using NetflixClone.Data;
 using NetflixClone.Models;
-using NetflixClone.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Models;
 using DTOs;
 
 namespace NetflixClone.Services

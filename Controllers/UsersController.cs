@@ -54,5 +54,23 @@ namespace NetflixClone.Controllers
 
             return Ok(user);
         }
+
+        [HttpPost("{userId}/favorites")]
+        public async Task<IActionResult> AddFavorite(int userId, [FromBody] AddFavoriteDto dto)
+        {
+            var result = await _service.AddFavoriteAsync(userId, dto.MovieId);
+            if (!result) return BadRequest("Usuário ou Filme não encontrado, ou filme já favoritado.");
+
+            return Ok("Filme adicionado aos favoritos com sucesso!");
+        }
+
+        [HttpDelete("{userId}/favorites")]
+        public async Task<IActionResult> RemoveFavorite(int userId, [FromBody] AddFavoriteDto dto)
+        {
+            var result = await _service.RemoveFavoriteAsync(userId, dto.MovieId);
+            if (!result) return BadRequest("Filme/Usuário não Existe ou Filme não favoritado");
+
+            return Ok("Filme removido dos favoritos com sucesso!");
+        }
     }
 }

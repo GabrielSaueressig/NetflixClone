@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace NetflixClone.DTOs
+namespace DTOs
 {
     public class MovieCreateDto
     {
@@ -13,8 +13,9 @@ namespace NetflixClone.DTOs
 
         [Required(ErrorMessage = "Informe ao menos um ID de gênero")]
         public List<int> GenreIds { get; set; } = new();
+        public string VideoUrl { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "A Url do vídeo é obrigatoria")]
-        public string VideoUrl{get;set;} = string.Empty;
+        public string PosterUrl { get; set; } = string.Empty;
+        public string ThumbnailUrl { get; set; } = string.Empty;
     }
 }

@@ -9,6 +9,8 @@ namespace Models
         public List<GenreReadDto> Genres { get; set; } = new();
         public string Description { get; set; } = string.Empty;
         public string VideoUrl { get; set; } = string.Empty;
+        public string PosterUrl { get; set; } = string.Empty;
+        public string ThumbnailUrl { get; set; } = string.Empty;
 
     }
 }

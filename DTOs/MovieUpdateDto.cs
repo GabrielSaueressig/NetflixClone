@@ -12,5 +12,7 @@ namespace DTOs
 
         public string? Description { get; set; }
         public string? VideoUrl { get; set; }
+        public string? PosterUrl { get; set; } = string.Empty;
+        public string? ThumbnailUrl { get; set; } = string.Empty;
     }
 }

@@ -1,6 +1,5 @@
 using DTOs;
 using Microsoft.AspNetCore.Mvc;
-using NetflixClone.DTOs;
 using NetflixClone.Services;
 
 namespace NetflixClone.Controllers

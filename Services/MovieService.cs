@@ -1,6 +1,5 @@
 using NetflixClone.Data;
 using NetflixClone.Models;
-using NetflixClone.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using DTOs;
@@ -24,6 +23,9 @@ namespace NetflixClone.Services
                 Title = movie.Title,
                 Description = movie.Description,
                 VideoUrl = movie.VideoUrl,
+                PosterUrl = movie.PosterUrl,
+                ThumbnailUrl = movie.ThumbnailUrl,
+
                 Genres = movie.Genres.Select(g => new GenreReadDto
                 {
                     Id = g.Id,
@@ -40,6 +42,8 @@ namespace NetflixClone.Services
                 Title = m.Title,
                 Description = m.Description,
                 VideoUrl = m.VideoUrl,
+                PosterUrl = m.PosterUrl,
+                ThumbnailUrl = m.ThumbnailUrl,
 
                 Genres = m.Genres.Select(g => new GenreReadDto
                 {
@@ -59,7 +63,9 @@ namespace NetflixClone.Services
                 Title = dto.Title,
                 Description = dto.Description,
                 Genres = genres,
-                VideoUrl = dto.VideoUrl
+                VideoUrl = dto.VideoUrl,
+                PosterUrl = dto.PosterUrl,
+                ThumbnailUrl = dto.ThumbnailUrl
             };
 
             _context.Movies.Add(Movie);
@@ -80,6 +86,10 @@ namespace NetflixClone.Services
                 Movie.Description = dto.Description;
             if (dto.VideoUrl != null)
                 Movie.VideoUrl = dto.VideoUrl;
+            if(dto.PosterUrl != null)
+                Movie.PosterUrl = dto.PosterUrl;
+            if(dto.ThumbnailUrl != null)
+                Movie.ThumbnailUrl = dto.ThumbnailUrl;
             if (dto.GenresId != null)
             {
                 var newGenres = await _context.Genres.Where(g => dto.GenresId.Contains(g.Id)).ToListAsync();
