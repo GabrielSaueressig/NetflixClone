@@ -1,4 +1,5 @@
 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DTOs
@@ -12,6 +13,9 @@ namespace DTOs
         [Required]
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
+
+        [PasswordPropertyText]
+        public string password {get;set;} = string.Empty;
     }
 
 }

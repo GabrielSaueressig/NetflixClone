@@ -1,11 +1,11 @@
 using NetflixClone.Data;
 using NetflixClone.Models;
-using System.Linq;
 using DTOs;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-namespace NetflixClone.Services
+
+namespace Services
 {
     public class UserService
     {
@@ -50,10 +50,15 @@ namespace NetflixClone.Services
 
         public async Task<UserReadDto> CreateAsync(UserCreateDto dto)
         {
+            var userExist = await _context.Users.AnyAsync(u => u.Email == dto.Email.ToLower());
+            if (userExist)
+                throw new Exception("Este e-mail já está em uso.");
+
             var user = new User
             {
                 Name = dto.Name,
-                Email = dto.Email
+                Email = dto.Email.ToLower(),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.password, workFactor: 12)
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -106,10 +111,10 @@ namespace NetflixClone.Services
             var user = await _context.Users.Include(u => u.Favorites).FirstOrDefaultAsync(u => u.Id == id);
             var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == movieId);
 
-            if(user == null || movie == null)
+            if (user == null || movie == null)
                 return false;
 
-            if(user.Favorites.Any(m => m.Id == movieId))
+            if (user.Favorites.Any(m => m.Id == movieId))
                 return false;
             user.Favorites.Add(movie);
             await _context.SaveChangesAsync();
@@ -121,12 +126,12 @@ namespace NetflixClone.Services
             var user = await _context.Users.Include(u => u.Favorites).FirstOrDefaultAsync(u => u.Id == id);
             var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == movieId);
 
-            if(user == null || movie == null)
+            if (user == null || movie == null)
                 return false;
 
-            if(!user.Favorites.Any(m => m.Id == movieId))
+            if (!user.Favorites.Any(m => m.Id == movieId))
                 return false;
-                
+
             user.Favorites.Remove(movie);
             await _context.SaveChangesAsync();
             return true;

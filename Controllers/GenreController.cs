@@ -1,6 +1,7 @@
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetflixClone.Services;
+using Services;
 
 namespace NetflixClone.Controllers
 {
@@ -22,6 +23,7 @@ namespace NetflixClone.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] GenreCreateDto dto)
         {
             var created = await _service.CreateAsync(dto);
@@ -29,6 +31,7 @@ namespace NetflixClone.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Update(int id, [FromBody] GenreUpdateDto dto)
         {
@@ -38,6 +41,7 @@ namespace NetflixClone.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _service.DeleteAsync(id);

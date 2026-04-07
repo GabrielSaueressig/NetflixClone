@@ -1,6 +1,7 @@
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetflixClone.Services;
+using Services;
 
 namespace NetflixClone.Controllers
 {
@@ -16,12 +17,14 @@ namespace NetflixClone.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _service.GetAllAsync());
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] MovieCreateDto dto)
         {
             var created = await _service.CreateAsync(dto);
@@ -29,6 +32,7 @@ namespace NetflixClone.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Update(int id, [FromBody] MovieUpdateDto dto)
         {
@@ -38,6 +42,7 @@ namespace NetflixClone.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _service.DeleteAsync(id);
@@ -46,6 +51,7 @@ namespace NetflixClone.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
 
         public async Task<IActionResult> GetById(int id)
         {
@@ -54,5 +60,17 @@ namespace NetflixClone.Controllers
 
             return Ok(Movie);
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> GetFiltered([FromQuery]string? searchTitle,[FromQuery] List<int>? genreIds,
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            var movies = await _service.GetFilteredAsync(searchTitle, genreIds, page, pageSize);
+            if (movies == null) return NotFound();
+
+            return Ok(movies);
+        }
+
+        
     }
 }

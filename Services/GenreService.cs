@@ -3,7 +3,7 @@ using NetflixClone.Models;
 using Microsoft.EntityFrameworkCore;
 using DTOs;
 
-namespace NetflixClone.Services
+namespace Services
 {
     public class GenreService
     {

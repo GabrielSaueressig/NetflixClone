@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using DTOs;
 
-namespace NetflixClone.Services
+namespace Services
 {
     public class MovieService
     {
@@ -86,9 +86,9 @@ namespace NetflixClone.Services
                 Movie.Description = dto.Description;
             if (dto.VideoUrl != null)
                 Movie.VideoUrl = dto.VideoUrl;
-            if(dto.PosterUrl != null)
+            if (dto.PosterUrl != null)
                 Movie.PosterUrl = dto.PosterUrl;
-            if(dto.ThumbnailUrl != null)
+            if (dto.ThumbnailUrl != null)
                 Movie.ThumbnailUrl = dto.ThumbnailUrl;
             if (dto.GenresId != null)
             {
@@ -114,8 +114,34 @@ namespace NetflixClone.Services
             var Movie = await _context.Movies.Include(m => m.Genres).FirstOrDefaultAsync(m => m.Id == id);
 
             if (Movie == null) return null;
-            
+
             return MapToReadDto(Movie);
+        }
+
+        public async Task<List<MovieReadDto>> GetFilteredAsync(string? searchTitle, List<int>? genreIds, int page = 1, int pageSize = 10)
+        {
+            var query = _context.Movies.Include(m => m.Genres).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTitle))
+                query = query.Where(m => m.Title.ToLower().Contains(searchTitle.ToLower()));
+            if (genreIds != null && genreIds.Any())
+                query = query.Where(m => m.Genres.Any(g => genreIds.Contains(g.Id)));
+
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            return await query.Select(m => new MovieReadDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                VideoUrl = m.VideoUrl,
+                PosterUrl = m.PosterUrl,
+                ThumbnailUrl = m.ThumbnailUrl,
+                Genres = m.Genres.Select(g => new GenreReadDto
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }).ToList()
+            }).ToListAsync();
         }
     }
 }
